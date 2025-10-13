@@ -147,6 +147,10 @@ export function AuroraHero() {
                 variant="outline" 
                 size="lg"
                 className="px-8 py-4 border-2 border-slate-300 hover:border-slate-400 bg-white/80 backdrop-blur-sm hover:bg-white/90 text-slate-700 font-semibold rounded-2xl transition-all duration-300 hover:scale-105"
+                onClick={() => {
+                  const servicesSection = document.getElementById('services');
+                  servicesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
               >
                 {t('viewAllServices')}
               </Button>
