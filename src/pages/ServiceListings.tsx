@@ -475,13 +475,13 @@ const BrowseServices = ({
         <div className="flex-1">
           {loading ? (
             <div className="text-center py-20">
-              <div className="relative">
-                <div className="w-16 h-16 mx-auto mb-6">
-                  <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
-                  <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">Loading Services</h3>
-                <p className="text-slate-600">Finding the best professionals for you...</p>
+                <p className="text-slate-600 text-sm">Loading services...</p>
               </div>
             </div>
           ) : (
