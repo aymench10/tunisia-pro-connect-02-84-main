@@ -287,7 +287,7 @@ export const useBookings = () => {
       const bookingDate = new Date(booking.booking_date).toLocaleDateString();
       const bookingTime = booking.booking_time;
 
-      // Create confirmation notification for client
+      // Create notification for client based on status
       let notificationTitle, notificationMessage, notificationType;
       
       if (status === "confirmed") {
@@ -298,10 +298,14 @@ export const useBookings = () => {
         notificationTitle = `✅ Service Completed!`;
         notificationMessage = `${providerName} has marked your booking on ${bookingDate} as completed. Thank you for using our service!`;
         notificationType = "booking_update";
+      } else if (status === "declined") {
+        notificationTitle = `📋 Booking Declined`;
+        notificationMessage = `${providerName} was unable to accommodate your booking request on ${bookingDate} at ${bookingTime}. You can search for other available providers or try a different time slot.`;
+        notificationType = "booking_update";
       }
       
-      // Only create notifications for confirmed and completed bookings
-      if (status !== "declined") {
+      // Create notifications for all status updates
+      if (notificationTitle && notificationMessage) {
         // Create in-app notification for the client (with error handling)
         try {
           // Check if notifications table exists by trying a simple query first
@@ -333,11 +337,23 @@ export const useBookings = () => {
         }
       }
 
+      // Show appropriate success message based on status
+      let toastTitle, toastDescription;
+      
+      if (status === "confirmed") {
+        toastTitle = "Booking confirmed";
+        toastDescription = "The booking has been confirmed successfully and the client has been notified";
+      } else if (status === "completed") {
+        toastTitle = "Booking completed";
+        toastDescription = "The booking has been marked as completed successfully";
+      } else if (status === "declined") {
+        toastTitle = "Booking declined";
+        toastDescription = "The booking has been declined successfully and the client has been notified";
+      }
+      
       toast({
-        title: status === "confirmed" ? `Booking confirmed` : `Booking completed`,
-        description: status === "confirmed" 
-          ? `The booking has been confirmed successfully and the client has been notified`
-          : `The booking has been marked as completed successfully`,
+        title: toastTitle,
+        description: toastDescription,
       });
 
       // Refresh bookings

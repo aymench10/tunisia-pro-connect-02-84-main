@@ -94,37 +94,42 @@ const OnlineBookingForm = ({ providerId, providerName }: OnlineBookingFormProps)
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Online Service Request</CardTitle>
-          <CardDescription>
+      <Card className="shadow-lg border-0">
+        <CardHeader className="space-y-1 pb-4">
+          <CardTitle className="text-2xl font-bold">Online Service Request</CardTitle>
+          <CardDescription className="text-base">
             Describe your project requirements for {providerName}
           </CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-6">
           {/* Provider Info */}
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="font-medium">Service Provider: {providerName}</p>
-            <p className="text-sm text-gray-600">Online Service</p>
+          <div className="p-4 bg-muted/50 rounded-lg border">
+            <p className="font-semibold text-lg">Service Provider: {providerName}</p>
+            <p className="text-sm text-muted-foreground">Online Service</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Project Title */}
             <div className="space-y-2">
-              <Label htmlFor="project-title">Project Title</Label>
+              <Label htmlFor="project-title" className="text-sm font-medium text-foreground">
+                Project Title
+              </Label>
               <Input 
                 id="project-title" 
                 placeholder="Brief title for your project"
                 value={projectTitle}
                 onChange={(e) => setProjectTitle(e.target.value)}
                 required
+                className="h-11 border-gray-300 focus:border-primary"
               />
             </div>
 
             {/* Project Details */}
             <div className="space-y-2">
-              <Label htmlFor="project-details">Project Description</Label>
+              <Label htmlFor="project-details" className="text-sm font-medium text-foreground">
+                Project Description
+              </Label>
               <Textarea 
                 id="project-details" 
                 placeholder="Describe your project in detail..."
@@ -132,26 +137,32 @@ const OnlineBookingForm = ({ providerId, providerName }: OnlineBookingFormProps)
                 onChange={(e) => setProjectDetails(e.target.value)}
                 required
                 rows={4}
+                className="border-gray-300 focus:border-primary resize-none"
               />
             </div>
 
             {/* Requirements */}
             <div className="space-y-2">
-              <Label htmlFor="requirements">Specific Requirements</Label>
+              <Label htmlFor="requirements" className="text-sm font-medium text-foreground">
+                Specific Requirements
+              </Label>
               <Textarea 
                 id="requirements" 
                 placeholder="Any specific requirements, features, or deliverables..."
                 value={requirements}
                 onChange={(e) => setRequirements(e.target.value)}
                 rows={3}
+                className="border-gray-300 focus:border-primary resize-none"
               />
             </div>
 
             {/* Budget */}
             <div className="space-y-2">
-              <Label htmlFor="budget">Budget Range</Label>
+              <Label htmlFor="budget" className="text-sm font-medium text-foreground">
+                Budget Range
+              </Label>
               <Select value={budget} onValueChange={setBudget} required>
-                <SelectTrigger>
+                <SelectTrigger className="h-11 border-gray-300">
                   <SelectValue placeholder="Select your budget range" />
                 </SelectTrigger>
                 <SelectContent>
@@ -167,9 +178,11 @@ const OnlineBookingForm = ({ providerId, providerName }: OnlineBookingFormProps)
 
             {/* Timeline */}
             <div className="space-y-2">
-              <Label htmlFor="timeline">Timeline</Label>
+              <Label htmlFor="timeline" className="text-sm font-medium text-foreground">
+                Timeline
+              </Label>
               <Select value={timeline} onValueChange={setTimeline} required>
-                <SelectTrigger>
+                <SelectTrigger className="h-11 border-gray-300">
                   <SelectValue placeholder="When do you need this completed?" />
                 </SelectTrigger>
                 <SelectContent>
@@ -183,40 +196,37 @@ const OnlineBookingForm = ({ providerId, providerName }: OnlineBookingFormProps)
             </div>
 
             {/* Terms */}
-            <div className="flex items-start space-x-2">
+            <div className="flex items-start space-x-2 pt-2">
               <input 
                 type="checkbox" 
                 id="terms" 
-                className="mt-1"
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                 checked={agree}
                 onChange={(e) => setAgree(e.target.checked)}
                 required
               />
-              <Label htmlFor="terms" className="text-sm">
+              <Label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
                 I agree to the terms and conditions and consent to the processing of my personal data.
               </Label>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button 
                 type="button" 
                 variant="outline" 
-                className="flex-1 flex items-center gap-2"
+                className="flex-1 h-12 border-2 hover:bg-muted/50 font-medium"
                 onClick={handleStartChat}
               >
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4 mr-2" />
                 Start Chat First
               </Button>
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !agree}
-                className="flex-1 group relative overflow-hidden rounded-3xl h-14 px-6 bg-gradient-to-r from-primary via-primary to-accent hover:from-primary/95 hover:via-primary/95 hover:to-accent/95 text-primary-foreground font-bold text-lg shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] transform hover:scale-[1.02] transition-all duration-500 ease-out disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                className="flex-1 h-12 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
-                <div className="relative z-10 flex items-center justify-center gap-3">
-                  <ShoppingCart className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                  <span className="tracking-wide">{isSubmitting ? "Submitting..." : "Submit Project Request"}</span>
-                </div>
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                {isSubmitting ? "Submitting..." : "Submit Project Request"}
               </Button>
             </div>
           </form>

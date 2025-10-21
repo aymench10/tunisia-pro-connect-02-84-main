@@ -23,6 +23,7 @@ const ServiceProviderDetails = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState<any | null>(null);
+  const [serviceType, setServiceType] = useState<'onsite' | 'online' | null>(null);
 
   const handleAuthRedirect = (action: 'login' | 'signup') => {
     navigate('/auth', { 
@@ -113,6 +114,11 @@ const ServiceProviderDetails = () => {
       // Automatically select the first service if available
       if (servicesData && servicesData.length > 0) {
         setSelectedService(servicesData[0]);
+        // Set service type from the first service (default to 'onsite' if not specified)
+        setServiceType((servicesData[0].service_type as 'onsite' | 'online') || 'onsite');
+      } else {
+        // Default to onsite if no services
+        setServiceType('onsite');
       }
     } catch (error: any) {
       console.error('Error fetching provider data:', error);
@@ -248,7 +254,18 @@ const ServiceProviderDetails = () => {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h1 className="text-2xl font-bold text-slate-900 mb-1">{providerName}</h1>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h1 className="text-2xl font-bold text-slate-900">{providerName}</h1>
+                      <span 
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${
+                          serviceType === 'onsite'
+                            ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                            : 'bg-green-100 text-green-700 border border-green-300'
+                        }`}
+                      >
+                        {serviceType === 'onsite' ? '📍 On-Site' : '💻 Online'}
+                      </span>
+                    </div>
                     <p className="text-blue-600 font-medium mb-2">{provider.job_categories?.name || 'Service Professional'}</p>
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
@@ -274,10 +291,17 @@ const ServiceProviderDetails = () => {
                     <div className="text-2xl font-bold text-blue-600">5+</div>
                     <div className="text-sm text-slate-600">Years Experience</div>
                   </div>
-                  <div className="text-center p-4 bg-green-50 rounded-2xl">
-                    <div className="text-2xl font-bold text-green-600">{provider.location || 'Monastir'}</div>
-                    <div className="text-sm text-slate-600">Location</div>
-                  </div>
+                  {serviceType === 'onsite' ? (
+                    <div className="text-center p-4 bg-green-50 rounded-2xl">
+                      <div className="text-2xl font-bold text-green-600">{provider.location || 'Monastir'}</div>
+                      <div className="text-sm text-slate-600">Location</div>
+                    </div>
+                  ) : (
+                    <div className="text-center p-4 bg-green-50 rounded-2xl">
+                      <div className="text-2xl font-bold text-green-600">💻</div>
+                      <div className="text-sm text-slate-600">Online Service</div>
+                    </div>
+                  )}
                   <div className="text-center p-4 bg-purple-50 rounded-2xl">
                     <div className="text-2xl font-bold text-purple-600">Same Day</div>
                     <div className="text-sm text-slate-600">Available</div>
@@ -452,16 +476,29 @@ const ServiceProviderDetails = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <span className="font-medium text-slate-700">Location:</span>
+                  {serviceType === 'onsite' && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="font-medium text-slate-700">Location:</span>
+                      </div>
+                      <p className="text-slate-600">{provider.location || 'Monastir'}</p>
                     </div>
-                    <p className="text-slate-600">{provider.location || 'Monastir'}</p>
-                  </div>
+                  )}
+                  {serviceType === 'online' && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span className="font-medium text-slate-700">Service Type:</span>
+                      </div>
+                      <p className="text-slate-600">💻 Online Service</p>
+                    </div>
+                  )}
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -508,15 +545,27 @@ const ServiceProviderDetails = () => {
                 </div>
                 
                 <div className="space-y-3">
-                  <Button 
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
-                    onClick={() => setShowCalendar(true)}
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Book Now
-                  </Button>
+                  {serviceType === 'onsite' ? (
+                    <Button 
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                      onClick={() => setShowCalendar(true)}
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Book Now
+                    </Button>
+                  ) : (
+                    <Button 
+                      className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-semibold py-3 rounded-2xl shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300"
+                      onClick={() => navigate(`/booking/${provider.id}`)}
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Submit Project Request
+                    </Button>
+                  )}
                   
                   <Button 
                     variant="outline" 
@@ -544,9 +593,17 @@ const ServiceProviderDetails = () => {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Location</span>
-                  <span className="font-medium text-slate-900">{provider.location || 'Monastir'}</span>
+                  <span className="text-slate-600">Service Type</span>
+                  <span className="font-medium text-slate-900">
+                    {serviceType === 'onsite' ? '📍 On-site' : '💻 Online'}
+                  </span>
                 </div>
+                {serviceType === 'onsite' && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-600">Location</span>
+                    <span className="font-medium text-slate-900">{provider.location || 'Monastir'}</span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center">
                   <span className="text-slate-600">Experience</span>
                   <span className="font-medium text-slate-900">5 years</span>
@@ -561,8 +618,8 @@ const ServiceProviderDetails = () => {
         </div>
       </div>
 
-      {/* Booking Calendar Modal */}
-      {showCalendar && (
+      {/* Booking Calendar Modal - Only for onsite services */}
+      {showCalendar && serviceType === 'onsite' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">

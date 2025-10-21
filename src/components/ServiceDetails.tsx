@@ -121,6 +121,8 @@ export const ServiceDetails = ({ service, onBack, onBookService, isOwner = false
     });
   };
 
+  const serviceType = (service.service_type as 'onsite' | 'online') || 'onsite';
+
   return (
     <div className="space-y-6">
       {/* Header with back button */}
@@ -130,7 +132,12 @@ export const ServiceDetails = ({ service, onBack, onBookService, isOwner = false
         </Button>
         <div>
           <h1 className="text-2xl font-bold">{service.business_name}</h1>
-          <p className="text-muted-foreground">{service.location}</p>
+          {serviceType === 'onsite' && (
+            <p className="text-muted-foreground">{service.location}</p>
+          )}
+          {serviceType === 'online' && (
+            <p className="text-muted-foreground">💻 Online Service</p>
+          )}
         </div>
       </div>
 
@@ -225,11 +232,18 @@ export const ServiceDetails = ({ service, onBack, onBookService, isOwner = false
         <CardContent className="space-y-4">
           {/* Service Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Location:</span>
-              <span>{service.location}</span>
-            </div>
+            {serviceType === 'onsite' && (
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <span className="font-medium">Location:</span>
+                <span>{service.location}</span>
+              </div>
+            )}
+            {serviceType === 'online' && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">💻 Online Service</span>
+              </div>
+            )}
             
             {service.hourly_rate && (
               <div className="flex items-center gap-2">

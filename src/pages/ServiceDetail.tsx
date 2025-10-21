@@ -18,6 +18,7 @@ const ServiceDetail = () => {
   const [service, setService] = useState<ServiceWithProvider | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
+  const [serviceType, setServiceType] = useState<'onsite' | 'online' | null>(null);
 
   useEffect(() => {
     const fetchServiceDetails = async () => {
@@ -91,6 +92,9 @@ const ServiceDetail = () => {
 
         setService(enrichedService as ServiceWithProvider);
         
+        // Set service type (default to 'onsite' if not specified for backward compatibility)
+        setServiceType((serviceData.service_type as 'onsite' | 'online') || 'onsite');
+        
         // Check if current user is the owner
         if (user && (serviceData.user_id === user.id || serviceProviderData?.user_id === user.id)) {
           setIsOwner(true);
@@ -152,11 +156,30 @@ const ServiceDetail = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-4xl font-bold text-foreground">{service.business_name}</h1>
-            <p className="text-muted-foreground flex items-center gap-2 mt-2 text-lg">
-              <MapPin className="h-5 w-5" />
-              {service.location}
-            </p>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-4xl font-bold text-foreground">{service.business_name}</h1>
+              <Badge 
+                variant="outline" 
+                className={`text-lg px-4 py-1 font-semibold ${
+                  serviceType === 'onsite'
+                    ? 'bg-blue-50 text-blue-700 border-blue-300'
+                    : 'bg-green-50 text-green-700 border-green-300'
+                }`}
+              >
+                {serviceType === 'onsite' ? '📍 On-Site Service' : '💻 Online Service'}
+              </Badge>
+            </div>
+            {serviceType === 'onsite' && (
+              <p className="text-muted-foreground flex items-center gap-2 mt-2 text-lg">
+                <MapPin className="h-5 w-5" />
+                {service.location}
+              </p>
+            )}
+            {serviceType === 'online' && (
+              <p className="text-muted-foreground flex items-center gap-2 mt-2 text-lg">
+                💻 Remote work - No location visit required
+              </p>
+            )}
           </div>
           {!isOwner && (
             <Badge variant="outline" className="text-green-600 border-green-600 bg-green-50">
@@ -234,10 +257,17 @@ const ServiceDetail = () => {
                           <span className="font-medium">{service.experience_years} years experience</span>
                         </div>
                       )}
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        <span>{service.location}</span>
-                      </div>
+                      {serviceType === 'onsite' && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <MapPin className="h-4 w-4 text-primary" />
+                          <span>{service.location}</span>
+                        </div>
+                      )}
+                      {serviceType === 'online' && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="font-medium">💻 Remote Service</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -337,10 +367,25 @@ const ServiceDetail = () => {
                     <Button 
                       onClick={handleBookService}
                       size="lg"
-                      className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                      className={`w-full ${
+                        serviceType === 'onsite'
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800'
+                          : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800'
+                      }`}
                     >
-                      <Calendar className="h-5 w-5 mr-2" />
-                      Book Now
+                      {serviceType === 'onsite' ? (
+                        <>
+                          <Calendar className="h-5 w-5 mr-2" />
+                          Book Appointment
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          Submit Project Request
+                        </>
+                      )}
                     </Button>
                     <ChatProviderButton 
                       providerId={service.service_provider_id || service.user_id || ''}
@@ -375,9 +420,17 @@ const ServiceDetail = () => {
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Location</span>
-                  <span className="font-medium">{service.location}</span>
+                  <span className="text-muted-foreground">Service Type</span>
+                  <Badge variant="outline">
+                    {serviceType === 'onsite' ? '📍 On-site' : '💻 Online'}
+                  </Badge>
                 </div>
+                {serviceType === 'onsite' && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Location</span>
+                    <span className="font-medium">{service.location}</span>
+                  </div>
+                )}
                 {service.experience_years !== null && (
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Experience</span>
