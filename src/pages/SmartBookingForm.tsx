@@ -100,10 +100,13 @@ const SmartBookingForm = () => {
         const categoryName = (services as any).job_categories?.name || '';
         const detectedServiceType = services.service_type as 'onsite' | 'online';
 
+        console.log('Detected service type:', detectedServiceType, 'for provider:', providerId);
+
         if (!detectedServiceType || (detectedServiceType !== 'onsite' && detectedServiceType !== 'online')) {
+          console.error('Invalid service type detected:', detectedServiceType);
           toast({
             title: "Service Type Unknown",
-            description: "Unable to determine if this is an on-site or online service",
+            description: "Unable to determine if this is an on-site or online service. Please contact support.",
             variant: "destructive",
           });
           navigate("/services");
@@ -184,8 +187,8 @@ const SmartBookingForm = () => {
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <div className={`inline-flex items-center px-6 py-3 rounded-full text-sm font-semibold shadow-lg ${
               serviceType === 'onsite' 
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' 
-                : 'bg-gradient-to-r from-green-500 to-green-600 text-white'
+                ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' 
+                : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
             }`}>
               {serviceType === 'onsite' ? '📍 Service à Domicile' : '💻 Service en Ligne'}
             </div>

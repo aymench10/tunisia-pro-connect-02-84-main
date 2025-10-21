@@ -569,7 +569,7 @@ const BrowseServices = ({
                                 servicePhoto={(service as any).servicePhoto}
                                 price={service.hourly_rate ? `${service.hourly_rate} TND/hour` : undefined}
                                 businessName={service.business_name}
-                                serviceType="onsite"
+                                serviceType={(service as any).service_type || 'onsite'}
                               />
                             </div>
                           );
@@ -618,7 +618,7 @@ const BrowseServices = ({
                                 servicePhoto={(service as any).servicePhoto}
                                 price={service.hourly_rate ? `${service.hourly_rate} TND/hour` : undefined}
                                 businessName={service.business_name}
-                                serviceType="online"
+                                serviceType={(service as any).service_type || 'online'}
                               />
                             </div>
                           );

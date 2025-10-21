@@ -92,7 +92,11 @@ const ServiceDetail = () => {
 
         setService(enrichedService as ServiceWithProvider);
         
+<<<<<<< Updated upstream
         // Set service type (default to 'onsite' if not specified for backward compatibility)
+=======
+        // Set service type (onsite or online)
+>>>>>>> Stashed changes
         setServiceType((serviceData.service_type as 'onsite' | 'online') || 'onsite');
         
         // Check if current user is the owner
@@ -182,9 +186,16 @@ const ServiceDetail = () => {
             )}
           </div>
           {!isOwner && (
-            <Badge variant="outline" className="text-green-600 border-green-600 bg-green-50">
-              Available for booking
-            </Badge>
+            <div className="flex gap-2">
+              <Badge variant="outline" className="text-green-600 border-green-600 bg-green-50">
+                Available for booking
+              </Badge>
+              {serviceType && (
+                <Badge variant="secondary" className={serviceType === 'online' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200'}>
+                  {serviceType === 'online' ? '💻 Online Service' : '📍 On-site Service'}
+                </Badge>
+              )}
+            </div>
           )}
         </div>
 
@@ -373,6 +384,7 @@ const ServiceDetail = () => {
                           : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800'
                       }`}
                     >
+<<<<<<< Updated upstream
                       {serviceType === 'onsite' ? (
                         <>
                           <Calendar className="h-5 w-5 mr-2" />
@@ -386,6 +398,10 @@ const ServiceDetail = () => {
                           Submit Project Request
                         </>
                       )}
+=======
+                      <Calendar className="h-5 w-5 mr-2" />
+                      {serviceType === 'online' ? 'Submit Project Request' : 'Book Appointment'}
+>>>>>>> Stashed changes
                     </Button>
                     <ChatProviderButton 
                       providerId={service.service_provider_id || service.user_id || ''}

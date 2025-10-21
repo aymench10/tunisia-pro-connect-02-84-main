@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Star, User, Clock, ArrowRight, Verified, Zap } from "lucide-react";
+import { MapPin, Star, User, Clock, ArrowRight, Verified, Zap, Laptop } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ServiceCardProps {
@@ -66,16 +66,22 @@ const ServiceCard = ({
           {/* Service Type Badge */}
           {serviceType && (
             <div className="absolute bottom-4 left-4 z-20">
-              <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-slate-700 border-0 shadow-md px-3 py-1 text-xs font-medium">
+              <Badge 
+                className={`backdrop-blur-sm border-0 shadow-lg px-3 py-1.5 text-xs font-semibold ${
+                  serviceType === 'onsite' 
+                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' 
+                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                }`}
+              >
                 {serviceType === 'onsite' ? (
                   <>
                     <MapPin className="w-3 h-3 mr-1" />
-                    On-site
+                    📍 On-site
                   </>
                 ) : (
                   <>
-                    <Clock className="w-3 h-3 mr-1" />
-                    Online
+                    <Laptop className="w-3 h-3 mr-1" />
+                    💻 Online
                   </>
                 )}
               </Badge>
